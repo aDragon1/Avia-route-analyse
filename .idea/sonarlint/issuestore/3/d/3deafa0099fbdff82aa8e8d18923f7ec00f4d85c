@@ -1,0 +1,6 @@
+
+;kotlin:S6310/"Avoid hardcoded dispatchers.(Í¡·Ş8õÍôôª2
+;kotlin:S6310="Avoid hardcoded dispatchers.(Í¡·Ş8öÍôôª2
+>kotlin:S1128"Remove this unused import.(ÊÒÅ­ùÿÿÿÿ8´š…õª2
+lkotlin:S1192)"MDefine a constant instead of duplicating this literal "ĞœĞ¾ÑĞºĞ²Ğ°" 3 times.(Ä„Èá8…Îôôª2
+vkotlin:S1192)"WDefine a constant instead of duplicating this literal "ĞĞ¾Ğ²Ğ¾ĞºÑƒĞ·Ğ½ĞµÑ†Ğº" 3 times.(Ä„Èá8†Îôôª2
