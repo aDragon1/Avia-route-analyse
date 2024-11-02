@@ -5,10 +5,10 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/radioTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:text="@string/sortBy"
         android:textSize="18sp" />
 
     <RadioGroup
@@ -17,40 +17,5 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp">
 
-        <RadioButton
-            android:id="@+id/radioOptionDefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/sortByDefault"
-            android:textSize="16sp" />
-
-        <RadioButton
-            android:id="@+id/radioOptionPriceUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sortByPriceUp"
-            android:textSize="16sp" />
-
-        <RadioButton
-            android:id="@+id/radioOptionPriceDown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sortByPriceDown"
-            android:textSize="16sp" />
-
-        <RadioButton
-            android:id="@+id/radioOptionDateUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sortByDateUp"
-            android:textSize="16sp" />
-
-        <RadioButton
-            android:id="@+id/radioOptionDateDown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sortByDateDown"
-            android:textSize="16sp" />
     </RadioGroup>
 </LinearLayout>

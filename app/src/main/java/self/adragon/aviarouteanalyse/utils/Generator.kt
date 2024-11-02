@@ -3,6 +3,7 @@ package self.adragon.aviarouteanalyse.utils
 import self.adragon.aviarouteanalyse.data.model.Flight
 import self.adragon.aviarouteanalyse.data.model.LocalDateConverter
 import java.time.LocalDate
+import kotlin.math.roundToInt
 
 @Suppress("SpellCheckingInspection")
 class Generator {
@@ -29,6 +30,9 @@ class Generator {
         val minDate = LocalDate.now()
         val maxDate = LocalDate.of(2026, 1, 1)
 
+        val min = 1f
+        val max = 100f
+
         var id = 1
         for (i in airportNames.indices) {
             val departure = airportNames[i]
@@ -37,10 +41,11 @@ class Generator {
                 val airline = airlineNames.random()
 
                 val date = randomDate(minDate, maxDate)
-                val price = (1..100).random()
+                val price1 = (min + Math.random() * (max - min)).toFloat().round()
+                val price2 = (min + Math.random() * (max - min)).toFloat().round()
 
-                val f1 = Flight(id++, airline, departure, destination, price, date)
-                val f2 = Flight(id++, airline, destination, departure, price, date)
+                val f1 = Flight(id++, airline, departure, destination, price1, date)
+                val f2 = Flight(id++, airline, destination, departure, price2, date)
 
                 flights.add(f1)
                 flights.add(f2)
@@ -50,10 +55,8 @@ class Generator {
             if (id > n) break
         }
 
-//        flights.removeAll { it.departureAirport == it.destinationAirport }
         return flights
     }
-
 
     private fun randomDate(minDate: LocalDate, maxDate: LocalDate): LocalDate {
         val minDay = minDate.toEpochDay()
@@ -61,5 +64,7 @@ class Generator {
 
         return LocalDate.ofEpochDay((minDay..maxDay).random())
     }
+
+    private fun Float.round() = (this * 100).roundToInt() / 100f
 }
 

@@ -1,9 +1,4 @@
 <resources>
     <string name="app_name">Avia route analyse</string>
-    <string name="sortBy">Сортировать по:</string>
-    <string name="sortByDefault">По умолчанию</string>
-    <string name="sortByPriceUp">Цене ↑</string>
-    <string name="sortByPriceDown">Цене ↓</string>
-    <string name="sortByDateUp">Дате ↑</string>
-    <string name="sortByDateDown">Дате ↓</string>
+
 </resources>

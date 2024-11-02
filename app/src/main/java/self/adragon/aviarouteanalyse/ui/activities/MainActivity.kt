@@ -9,14 +9,15 @@ import com.google.android.material.tabs.TabLayoutMediator
 import self.adragon.aviarouteanalyse.R
 import self.adragon.aviarouteanalyse.data.database.FlightsDatabase
 import self.adragon.aviarouteanalyse.ui.adapters.ViewPagerAdapter
-import self.adragon.aviarouteanalyse.ui.fragments.ListData
-import self.adragon.aviarouteanalyse.ui.fragments.Table
+import self.adragon.aviarouteanalyse.ui.fragments.FlightAnalysisFragment
+import self.adragon.aviarouteanalyse.ui.fragments.FlightGroupedByFragment
+import self.adragon.aviarouteanalyse.ui.fragments.FlightListFragment
+import self.adragon.aviarouteanalyse.ui.fragments.FlightTableFragment
 import self.adragon.aviarouteanalyse.ui.viewmodels.FlightViewModel
 import self.adragon.aviarouteanalyse.utils.Generator
 
 @Suppress("SpellCheckingInspection")
 class MainActivity : AppCompatActivity() {
-
     private val flightViewModel: FlightViewModel by viewModels()
 
     private lateinit var viewPager2: ViewPager2
@@ -33,15 +34,19 @@ class MainActivity : AppCompatActivity() {
         val data = Generator().generateFlights()
         data.forEach { flightViewModel.insert(it) }
 
-        val fragments = listOf(ListData(), Table())
+        val fragments = listOf(
+            FlightListFragment(), FlightGroupedByFragment(),
+            FlightAnalysisFragment(), FlightTableFragment()
+        )
         viewPager2.adapter = ViewPagerAdapter(fragments, this)
         viewPager2.isUserInputEnabled = false
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, i ->
             tab.text = when (i) {
                 0 -> "Список"
-                1 -> "Таблица"
-                2 -> ""
+                1 -> "Группировка"
+                2 -> "Графики"
+                3 -> "Таблица"
                 else -> ""
             }
         }.attach()

@@ -9,13 +9,14 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 kotlinx = "kotlinx-serialization-json"
-kotlinxCoroutinesAndroid = "1.6.0"
-kotlinxCoroutinesCore = "1.6.0"
-kotlinxSerializationJson = "1.5.1"
+kotlinxCoroutinesAndroid = "1.7.3"
+kotlinxCoroutinesCore = "1.6.1"
+kotlinxSerializationJson = "1.7.1"
 kotlinxSerializationJsonVersion = "1.7.1"
 material = "1.12.0"
-activity = "1.9.2"
+activity = "1.9.3"
 constraintlayout = "2.1.4"
+mpandroidchart = "v3.1.0"
 roomVersion = "2.6.1"
 symbolProcessingApi = "2.0.0-1.0.21"
 zoomlayout = "3.0.0"
@@ -36,11 +37,11 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 kotlinx = { module = "org.jetbrains.kotlin:kotlinx", version.ref = "kotlinx" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinx-serialization-json-v171 = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
 symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version = "2.0.20-1.0.25" }
 zoomlayout = { module = "com.github.shopgun:zoomlayout", version.ref = "zoomlayout" }
 

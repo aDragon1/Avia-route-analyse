@@ -26,7 +26,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -41,7 +41,6 @@ android {
         schemaDirectory("$projectDir/roomSchemas")
     }
 }
-
 
 dependencies {
     // KSP (Kotlin Symbol Processing)
@@ -68,8 +67,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.androidx.fragment.ktx)
-
-    implementation(libs.zoomlayout)
 
     // Testing
     testImplementation(libs.junit)

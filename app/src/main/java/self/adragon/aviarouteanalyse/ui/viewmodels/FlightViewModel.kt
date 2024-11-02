@@ -1,7 +1,6 @@
 package self.adragon.aviarouteanalyse.ui.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -10,9 +9,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import self.adragon.aviarouteanalyse.data.database.FlightsDatabase
 import self.adragon.aviarouteanalyse.data.model.Flight
-import self.adragon.aviarouteanalyse.data.model.SortOrder
+import self.adragon.aviarouteanalyse.data.model.enums.FlightEntries
+import self.adragon.aviarouteanalyse.data.model.enums.SortOrder
 import self.adragon.aviarouteanalyse.data.repo.FlightRepository
-import self.adragon.aviarouteanalyse.data.model.LocalDateConverter
 import java.time.LocalDate
 
 class FlightViewModel(application: Application) : AndroidViewModel(application) {
@@ -24,13 +23,13 @@ class FlightViewModel(application: Application) : AndroidViewModel(application) 
     val flights: LiveData<List<Flight>> get() = mediatorFLights
 
     private val sortOrder = MutableLiveData(SortOrder.DEFAULT)
+    val groupBy = MutableLiveData(FlightEntries.AIRLINE)
+
     private val minPrice = MutableLiveData<Float>()
     private val maxPrice = MutableLiveData<Float>()
 
     private val minDate = MutableLiveData<LocalDate>()
     private val maxDate = MutableLiveData<LocalDate>()
-
-    private val localDateConverter = LocalDateConverter()
 
     init {
         val db: FlightsDatabase = FlightsDatabase.getDatabase(application)
@@ -59,7 +58,13 @@ class FlightViewModel(application: Application) : AndroidViewModel(application) 
             sortOrder.value = order
     }
 
+    fun setGroupBy(gBy: FlightEntries) {
+        if (gBy != groupBy.value)
+            groupBy.value = gBy
+    }
+
     fun getSortOrder() = sortOrder.value
+    fun getGroupBy() = groupBy.value
 
     fun setPriceRange(mPrice: Float, mxPrice: Float) {
         minPrice.value = mPrice

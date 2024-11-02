@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import self.adragon.aviarouteanalyse.R
 import kotlin.math.max
 
+// Adapter for table and list view
 class FlightRecyclerViewAdapter(private val layoutID: Int, private val isTable: Boolean) :
     RecyclerView.Adapter<FlightRecyclerViewAdapter.TableRVVieHolder>() {
 
@@ -97,7 +98,5 @@ class FlightRecyclerViewAdapter(private val layoutID: Int, private val isTable: 
         for (i in maxColumnWidths.indices)
             maxColumnWidths[i] *= 30
         maxColumnWidths[0] *= 2 // random magic numbers, work 4 me, idc
-//        maxColumnWidths[4] *= 2
-//        maxColumnWidths[5] += 10
     }
 }

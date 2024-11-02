@@ -24,9 +24,11 @@ data class Flight(
     val destinationAirport: String,
 
     @ColumnInfo(name = "price")
-    val price: Int,
+    val price: Float,
 
     @ColumnInfo(name = "departureDate")
     @Contextual
-    val departureDate: LocalDate
+    val departureDate: LocalDate,
+
+    val stringDate: String = LocalDateConverter().fromDateToString(departureDate)
 )
