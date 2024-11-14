@@ -3,13 +3,13 @@ package self.adragon.aviarouteanalyse.ui.adapters.flightGroupByAdapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import self.adragon.aviarouteanalyse.R
 import self.adragon.aviarouteanalyse.data.model.Flight
-import self.adragon.aviarouteanalyse.data.model.enums.FlightEntries
 import self.adragon.aviarouteanalyse.data.model.LocalDateConverter
+import self.adragon.aviarouteanalyse.data.model.enums.FlightEntries
 import self.adragon.aviarouteanalyse.ui.adapters.flightGroupByAdapters.ChildAdapter.ChildViewHolder
 import self.adragon.aviarouteanalyse.ui.adapters.flightGroupByAdapters.ChildAdapter.OnItemClickListener
 
@@ -32,7 +32,7 @@ class ChildAdapter(private val groupBy: FlightEntries) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.flight_group_by_expandable_child_item, parent, false)
+            .inflate(R.layout.flight_list_item, parent, false)
         return ChildViewHolder(itemView)
     }
 
@@ -40,6 +40,8 @@ class ChildAdapter(private val groupBy: FlightEntries) :
         val child = data[position]
 
         holder.apply {
+
+
             idTextView.text = child.flightID.toString()
             airlineTextView.text = child.airline
             dateTextView.text = localDateConverter.fromDateToString(child.departureDate)
@@ -54,7 +56,7 @@ class ChildAdapter(private val groupBy: FlightEntries) :
     }
 
     inner class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val childLinearLayout: LinearLayout = itemView.findViewById(R.id.childLinearLayout)
+        private val flightCardView: CardView = itemView.findViewById(R.id.flightCardView)
 
         val idTextView: TextView = itemView.findViewById(R.id.idTextView)
         val airlineTextView: TextView = itemView.findViewById(R.id.airlineTextView)
@@ -64,7 +66,7 @@ class ChildAdapter(private val groupBy: FlightEntries) :
         val departureTextView: TextView = itemView.findViewById(R.id.departureTextView)
 
         init {
-            childLinearLayout.setOnClickListener {
+            flightCardView.setOnClickListener {
                 itemClickListener.onItemClick()
             }
             when (groupBy) {

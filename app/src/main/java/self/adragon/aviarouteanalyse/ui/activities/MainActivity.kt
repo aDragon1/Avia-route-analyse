@@ -9,14 +9,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import self.adragon.aviarouteanalyse.R
 import self.adragon.aviarouteanalyse.data.database.FlightsDatabase
 import self.adragon.aviarouteanalyse.ui.adapters.ViewPagerAdapter
-import self.adragon.aviarouteanalyse.ui.fragments.FlightAnalysisFragment
 import self.adragon.aviarouteanalyse.ui.fragments.FlightGroupedByFragment
 import self.adragon.aviarouteanalyse.ui.fragments.FlightListFragment
 import self.adragon.aviarouteanalyse.ui.fragments.FlightTableFragment
 import self.adragon.aviarouteanalyse.ui.viewmodels.FlightViewModel
 import self.adragon.aviarouteanalyse.utils.Generator
 
-@Suppress("SpellCheckingInspection")
 class MainActivity : AppCompatActivity() {
     private val flightViewModel: FlightViewModel by viewModels()
 
@@ -35,9 +33,11 @@ class MainActivity : AppCompatActivity() {
         data.forEach { flightViewModel.insert(it) }
 
         val fragments = listOf(
-            FlightListFragment(), FlightGroupedByFragment(),
-            FlightAnalysisFragment(), FlightTableFragment()
+            FlightListFragment(),
+            FlightGroupedByFragment(),
+            FlightTableFragment()
         )
+
         viewPager2.adapter = ViewPagerAdapter(fragments, this)
         viewPager2.isUserInputEnabled = false
 
@@ -45,11 +45,9 @@ class MainActivity : AppCompatActivity() {
             tab.text = when (i) {
                 0 -> "Список"
                 1 -> "Группировка"
-                2 -> "Графики"
-                3 -> "Таблица"
+                2 -> "Таблица"
                 else -> ""
             }
         }.attach()
     }
 }
-

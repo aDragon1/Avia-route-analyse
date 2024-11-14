@@ -24,10 +24,10 @@ class FlightListFragment : Fragment(R.layout.flight_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.listFragmentRecyclerView)
         val filterSettingImgButton = view.findViewById<ImageButton>(R.id.filterSettingImgButton)
         val countElementsTextView = view.findViewById<TextView>(R.id.countElementsTextView)
 
+        val recyclerView = view.findViewById<RecyclerView>(R.id.listFragmentRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         val adapter = FlightRecyclerViewAdapter(R.layout.flight_list_item, false)
@@ -49,16 +49,15 @@ class FlightListFragment : Fragment(R.layout.flight_list) {
         val paramsDialog = FlightsListSearchParamsDialog()
         var isParamsDialogShown = false
 
-        paramsDialog.setOnCustomDismissListener {
-            isParamsDialogShown = false
-        }
-
-        val searchParamsTag = "searchParamsDialog"
         filterSettingImgButton.setOnClickListener {
             if (!isParamsDialogShown) {
-                paramsDialog.show(childFragmentManager, searchParamsTag)
+                paramsDialog.show(childFragmentManager, "searchParamsDialog1")
                 isParamsDialogShown = true
             }
+        }
+
+        paramsDialog.setOnCustomDismissListener {
+            isParamsDialogShown = false
         }
     }
 

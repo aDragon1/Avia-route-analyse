@@ -23,7 +23,7 @@ class SearchParamsSort : Fragment(R.layout.search_params_sort) {
         val b2 = createRadioButton("Цене ↑")
         val b3 = createRadioButton("Цене ↓")
         val b4 = createRadioButton("Дате ↑")
-        val b5 = createRadioButton("Двте ↓")
+        val b5 = createRadioButton("Дате ↓")
 
         val radioButtons = listOf(b1, b2, b3, b4, b5)
         radioButtons.forEach { radioGroup.addView(it) }

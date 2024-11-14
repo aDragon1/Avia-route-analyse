@@ -1,6 +1,7 @@
 package self.adragon.aviarouteanalyse.ui.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -25,11 +26,26 @@ class FlightViewModel(application: Application) : AndroidViewModel(application) 
     private val sortOrder = MutableLiveData(SortOrder.DEFAULT)
     val groupBy = MutableLiveData(FlightEntries.AIRLINE)
 
-    private val minPrice = MutableLiveData<Float>()
-    private val maxPrice = MutableLiveData<Float>()
+    private val minPrice = MutableLiveData<Float?>()
+    private val maxPrice = MutableLiveData<Float?>()
 
-    private val minDate = MutableLiveData<LocalDate>()
-    private val maxDate = MutableLiveData<LocalDate>()
+    private val minDate = MutableLiveData<LocalDate?>()
+    private val maxDate = MutableLiveData<LocalDate?>()
+
+    private val departureAirport = MutableLiveData<String?>()
+    private val destinationAirport = MutableLiveData<String?>()
+
+    private var tempOrder: SortOrder? = null
+    private var tempGBy: FlightEntries? = null
+
+    private var tempDepAirport: String? = null
+    private var tempDestAirport: String? = null
+
+    private var tempMinDate: LocalDate? = null
+    private var tempMaxDate: LocalDate? = null
+
+    private var tempMinPrice: Float? = null
+    private var tempMaxPrice: Float? = null
 
     init {
         val db: FlightsDatabase = FlightsDatabase.getDatabase(application)
@@ -47,61 +63,80 @@ class FlightViewModel(application: Application) : AndroidViewModel(application) 
         mediatorFLights.addSource(maxPrice) { viewModelScope.launch { updateFlights() } }
         mediatorFLights.addSource(minDate) { viewModelScope.launch { updateFlights() } }
         mediatorFLights.addSource(maxDate) { viewModelScope.launch { updateFlights() } }
+        mediatorFLights.addSource(destinationAirport) { viewModelScope.launch { updateFlights() } }
+        mediatorFLights.addSource(departureAirport) { viewModelScope.launch { updateFlights() } }
     }
 
     fun insert(flight: Flight) = viewModelScope.launch {
         flightRepository.insert(flight)
     }
 
+    suspend fun getDepartureAirports() = flightRepository.getDepartureAirports()
+    suspend fun getDestinationAirports() = flightRepository.getDestinationAirports()
+
+    fun applyTemp() {
+        sortOrder.value = tempOrder
+
+        groupBy.value = if (tempGBy != null) tempGBy else FlightEntries.AIRLINE
+
+        minDate.value = tempMinDate
+        maxDate.value = tempMaxDate
+
+        minPrice.value = tempMinPrice
+        maxPrice.value = tempMaxPrice
+
+        departureAirport.value = tempDepAirport
+        destinationAirport.value = tempDestAirport
+
+        Log.d("mytag", "ApplyTemp - dep = $tempDepAirport , dest = $tempDestAirport")
+
+    }
+
     fun setSortOrder(order: SortOrder) {
         if (order != sortOrder.value)
-            sortOrder.value = order
+            tempOrder = order
     }
 
     fun setGroupBy(gBy: FlightEntries) {
         if (gBy != groupBy.value)
-            groupBy.value = gBy
+            tempGBy = gBy
+    }
+
+    fun setEndpointAirports(dest: String?, dep: String?) {
+        if (departureAirport.value != dep && dep != null)
+            tempDepAirport = dep.ifBlank { null }
+
+        if (destinationAirport.value != dest && dest != null)
+            tempDestAirport = dest.ifBlank { null }
+        Log.d("mytag", "setEndpointAirports - dep = $tempDepAirport , dest = $tempDestAirport")
     }
 
     fun getSortOrder() = sortOrder.value
     fun getGroupBy() = groupBy.value
 
     fun setPriceRange(mPrice: Float, mxPrice: Float) {
-        minPrice.value = mPrice
-        maxPrice.value = mxPrice
+        tempMinPrice = mPrice
+        tempMaxPrice = mxPrice
     }
 
     fun setDateRange(mDate: LocalDate, mxDate: LocalDate) {
-        minDate.value = mDate
-        maxDate.value = mxDate
+        tempMinDate = mDate
+        tempMaxDate = mxDate
     }
 
     private suspend fun updateFlights() {
-        fun filterFlights(
-            it: Flight,
-            minPriceValue: Float?,
-            maxPriceValue: Float?,
-            minDateValue: LocalDate?,
-            maxDateValue: LocalDate?
-        ) = ((minPriceValue == null || it.price >= minPriceValue) &&
-                (maxPriceValue == null || it.price <= maxPriceValue) &&
-                (minDateValue == null || it.departureDate >= minDateValue) &&
-                (maxDateValue == null || it.departureDate <= maxDateValue))
+        val priceMin = minPrice.value
+        val priceMax = maxPrice.value
+        val dateMin = minDate.value
+        val dateMax = maxDate.value
+        val dest = destinationAirport.value
+        val dep = departureAirport.value
+        val order = sortOrder.value
 
-        val originalFlights = originalFlights.value ?: emptyList()
-        var filteredList = when (sortOrder.value) {
-            SortOrder.DEFAULT -> originalFlights
-            SortOrder.PRICE_UP -> flightRepository.sortByPrice(true)
-            SortOrder.PRICE_DOWN -> flightRepository.sortByPrice(false)
-            SortOrder.DATE_UP -> flightRepository.sortByDate(true)
-            SortOrder.DATE_DOWN -> flightRepository.sortByDate(false)
-
-            else -> originalFlights
-        }
-
-        filteredList = filteredList.filter {
-            filterFlights(it, minPrice.value, maxPrice.value, minDate.value, maxDate.value)
-        }
+        val filteredList = flightRepository.filterFlightByEverything(
+            priceMin, priceMax, dateMin, dateMax, order
+        ).filter { dest == null || it.destinationAirport == dest }
+            .filter { dep == null || it.departureAirport == dep }
 
         mediatorFLights.value = filteredList
     }
@@ -123,4 +158,5 @@ class FlightViewModel(application: Application) : AndroidViewModel(application) 
 
         return min to max
     }
+
 }

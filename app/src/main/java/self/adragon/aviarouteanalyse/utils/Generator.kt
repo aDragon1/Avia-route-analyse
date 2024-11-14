@@ -1,7 +1,6 @@
 package self.adragon.aviarouteanalyse.utils
 
 import self.adragon.aviarouteanalyse.data.model.Flight
-import self.adragon.aviarouteanalyse.data.model.LocalDateConverter
 import java.time.LocalDate
 import kotlin.math.roundToInt
 

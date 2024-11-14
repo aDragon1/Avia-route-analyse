@@ -10,7 +10,7 @@ import self.adragon.aviarouteanalyse.data.model.Flight
 import self.adragon.aviarouteanalyse.data.model.LocalDateConverter
 
 
-@Database(entities = [Flight::class], version = 6, exportSchema = true)
+@Database(entities = [Flight::class], version = 7, exportSchema = true)
 @TypeConverters(LocalDateConverter::class)
 abstract class FlightsDatabase : RoomDatabase() {
     companion object {

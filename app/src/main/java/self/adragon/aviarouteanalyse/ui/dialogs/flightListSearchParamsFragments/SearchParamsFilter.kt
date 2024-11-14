@@ -5,12 +5,13 @@ import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.RangeSlider
 import self.adragon.aviarouteanalyse.R
 import self.adragon.aviarouteanalyse.data.model.LocalDateConverter
 import self.adragon.aviarouteanalyse.ui.viewmodels.FlightViewModel
 import java.time.LocalDate
+import kotlin.math.ceil
+import kotlin.math.floor
 
 class SearchParamsFilter : Fragment(R.layout.search_params_filter) {
     private val flightViewModel: FlightViewModel by activityViewModels()
@@ -32,14 +33,11 @@ class SearchParamsFilter : Fragment(R.layout.search_params_filter) {
         setSliderListeners()
     }
 
-    fun initializeViews(view: View) {
+    private fun initializeViews(view: View) {
         priceRangeSlider = view.findViewById(R.id.priceRangeSlider)
         dateRangeSlider = view.findViewById(R.id.dateRangeSlider)
 
-        priceRangeSlider.stepSize = 0.5f
         priceRangeSlider.isTickVisible = false
-
-        dateRangeSlider.stepSize = 1f
         dateRangeSlider.isTickVisible = false
 
         minPriceTextView = view.findViewById(R.id.minPriceTextView)
@@ -49,39 +47,42 @@ class SearchParamsFilter : Fragment(R.layout.search_params_filter) {
 
     }
 
-    fun setSliderValues() {
+    private fun setSliderValues() {
+
         val (minPrice, maxPrice) = flightViewModel.getMinMaxPrice()
         val (minDate, maxDate) = flightViewModel.getMinMaxDate()
 
+        val minPriceValue = floor(minPrice)
+        val maxPriceValue = ceil(maxPrice)
         val minDateValue = minDate.toEpochDay().toFloat()
         val maxDateValue = maxDate.toEpochDay().toFloat()
 
-        priceRangeSlider.values = listOf(minPrice, maxPrice)
-        dateRangeSlider.values = listOf(minDateValue, maxDateValue)
+        priceRangeSlider.values = listOf(minPriceValue, maxPriceValue)
+        priceRangeSlider.valueFrom = minPriceValue
+        priceRangeSlider.valueTo = maxPriceValue
+        priceRangeSlider.stepSize = 0.5f
 
-        priceRangeSlider.valueFrom = minPrice
-        priceRangeSlider.valueTo = maxPrice
+        dateRangeSlider.values = listOf(minDateValue, maxDateValue)
         dateRangeSlider.valueFrom = minDateValue
         dateRangeSlider.valueTo = maxDateValue
+        dateRangeSlider.stepSize = 1f
 
         updatePriceTextView(minPrice, maxPrice)
         updateDateTextView(minDateValue, maxDateValue)
     }
 
-    fun setSliderListeners() {
-        priceRangeSlider.addOnChangeListener { slider, value, fromUser ->
+    private fun setSliderListeners() {
+        priceRangeSlider.addOnChangeListener { slider, _, _ ->
             updatePriceTextView(slider.values[0], slider.values[1])
         }
 
         dateRangeSlider.addOnChangeListener { slider, _, _ ->
             updateDateTextView(slider.values[0], slider.values[1])
         }
-        dateRangeSlider.setLabelFormatter(object : LabelFormatter {
-            override fun getFormattedValue(value: Float): String {
-                val date = LocalDate.ofEpochDay(value.toLong())
-                return localDateConverted.fromDateToString(date)
-            }
-        })
+        dateRangeSlider.setLabelFormatter { value ->
+            val date = LocalDate.ofEpochDay(value.toLong())
+            localDateConverted.fromDateToString(date)
+        }
 
         priceRangeSlider.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: RangeSlider) {}
@@ -106,12 +107,12 @@ class SearchParamsFilter : Fragment(R.layout.search_params_filter) {
         })
     }
 
-    fun updatePriceTextView(minValue: Float, maxValue: Float) {
+    private fun updatePriceTextView(minValue: Float, maxValue: Float) {
         minPriceTextView.text = "$minValue"
         maxPriceTextView.text = "$maxValue"
     }
 
-    fun updateDateTextView(minValue: Float, maxValue: Float) {
+    private fun updateDateTextView(minValue: Float, maxValue: Float) {
         val minDate = LocalDate.ofEpochDay(minValue.toLong())
         val maxDate = LocalDate.ofEpochDay(maxValue.toLong())
 

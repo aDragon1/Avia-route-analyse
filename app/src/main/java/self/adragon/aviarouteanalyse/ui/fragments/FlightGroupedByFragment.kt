@@ -41,9 +41,10 @@ class FlightGroupedByFragment : Fragment(R.layout.flight_grouped_by) {
             isGroupDataDialogShown = false
         }
 
-        flightViewModel.groupBy.observe(viewLifecycleOwner) { groupBy ->
-            val grouped =
-                flightViewModel.flights.value?.groupBy {
+        // TODO rework it later (so complicated, I guess)
+        flightViewModel.flights.observe(viewLifecycleOwner) { flights ->
+            flightViewModel.groupBy.observe(viewLifecycleOwner) { groupBy ->
+                val grouped = flights.groupBy {
                     when (groupBy) {
                         FlightEntries.AIRLINE -> it.airline
                         FlightEntries.DEPARTURE_AIRPORT -> it.departureAirport
@@ -53,11 +54,14 @@ class FlightGroupedByFragment : Fragment(R.layout.flight_grouped_by) {
 
                         else -> it.airline
                     }
-                } ?: emptyMap()
+                }
 
-            val adapter = ParentAdapter(groupBy)
-            adapter.fillData(grouped)
-            groupDataRecyclerView.adapter = adapter
+                if (groupBy != null) {
+                    val adapter = ParentAdapter(groupBy)
+                    adapter.fillData(grouped)
+                    groupDataRecyclerView.adapter = adapter
+                }
+            }
         }
     }
 }
